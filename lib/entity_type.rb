@@ -1,6 +1,6 @@
 ##
 # This class defines an entity type, for example Organization or User, and also
-# it defines the attributes that it supported
+# it defines the fields that the entity supported
 class EntityType
   ORGANIZATION_FIELDS = ['_id', 'url', 'external_id', 'name', 'domain_names',
                          'created_at', 'details', 'shared_tickets', 'tags']
