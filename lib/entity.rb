@@ -8,6 +8,10 @@ class Entity
     @fields = filter_fields(entity_type, fields)
   end
 
+  def id
+    fields['_id']
+  end
+
   private
 
   def filter_fields(entity_type, fields)

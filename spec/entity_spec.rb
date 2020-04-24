@@ -29,7 +29,7 @@ describe Entity do
   end
 
   describe 'creation' do
-    subject { Entity.new(organization_type, fields) }
+    subject { described_class.new(organization_type, fields) }
 
     context 'when the fields contain all supported field names' do
       let(:fields) { organization_fields }
@@ -59,5 +59,11 @@ describe Entity do
         expect(subject.fields.key?('tags')).to eq false
       end
     end
+  end
+
+  describe '#id' do
+    subject { described_class.new(organization_type, organization_fields) }
+
+    it { expect(subject.id).to eq 101 }
   end
 end

@@ -2,7 +2,7 @@ require 'entity_type'
 
 describe EntityType do
   describe 'creation' do
-    subject { EntityType.new('Organization', EntityType::ORGANIZATION_FIELDS) }
+    subject { described_class.new('Organization', EntityType::ORGANIZATION_FIELDS) }
 
     it 'can create an entity type' do
       expect(subject.name).to eq 'Organization'
@@ -11,7 +11,7 @@ describe EntityType do
   end
 
   describe '#support_field?' do
-    subject { EntityType.new('Organization', EntityType::ORGANIZATION_FIELDS) }
+    subject { described_class.new('Organization', EntityType::ORGANIZATION_FIELDS) }
 
     it 'returns true if the field_name is defined in supported fields' do
       expect(subject.supports_field?('url')).to eq true
