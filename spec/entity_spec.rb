@@ -66,4 +66,10 @@ describe Entity do
 
     it { expect(subject.id).to eq 101 }
   end
+
+  describe '#entity_type_name' do
+    subject { described_class.new(organization_type, organization_fields) }
+
+    it { expect(subject.entity_type_name).to eq 'Organization' }
+  end
 end

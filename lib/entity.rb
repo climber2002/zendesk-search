@@ -12,6 +12,10 @@ class Entity
     fields['_id']
   end
 
+  def entity_type_name
+    entity_type.name
+  end
+
   private
 
   def filter_fields(entity_type, fields)

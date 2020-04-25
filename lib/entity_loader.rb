@@ -3,7 +3,7 @@ require 'json'
 
 ##
 # The entity loader builds a list of entities from a JSON file
-# based on a entity type, the caller only needs to specify the
+# based on an entity type, the caller only needs to specify the
 # filename, the application assumes the json files are stored in
 # `json` subfolder under project folder.
 class EntityLoader
@@ -21,6 +21,10 @@ class EntityLoader
   private
 
   def file
-    @file ||= File.read(File.join(File.dirname(__FILE__), '../json/', filename))
+    @file ||= File.read(filepath)
+  end
+
+  def filepath
+    File.join(File.dirname(__FILE__), '../json/', filename)
   end
 end
