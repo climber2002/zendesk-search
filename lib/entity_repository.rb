@@ -1,7 +1,8 @@
+##
+# EntityRepository is a repository that stores all entities. It maintains a EntityStore
+# for each type of entity. Each entity is stored in its own entity_store
 class EntityRepository
 
-  # EntityRepository manages a map of EntityStores, each type of entity has
-  # its own entity_store
   def initialize
     @entity_stores = {}
   end

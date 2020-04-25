@@ -18,7 +18,7 @@ describe EntityRepository do
       "created_at" => "2016-05-21T11:10:28 -10:00",
       "details" => "MegaCorp",
       "shared_tickets" => false,
-      "tags": [
+      "tags" => [
         "Fulton",
         "West",
         "Rodriguez",

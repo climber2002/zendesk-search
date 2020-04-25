@@ -19,7 +19,7 @@ describe Entity do
       "created_at" => "2016-05-21T11:10:28 -10:00",
       "details" => "MegaCorp",
       "shared_tickets" => false,
-      "tags": [
+      "tags" => [
         "Fulton",
         "West",
         "Rodriguez",
@@ -57,6 +57,14 @@ describe Entity do
       it 'creates the entity successfully without those missing fields' do
         expect(subject.fields).to eq fields
         expect(subject.fields.key?('tags')).to eq false
+      end
+    end
+
+    context 'when the fields has no _id field' do
+      let(:fields) { organization_fields.delete_if { |k, _| k == '_id' } }
+
+      it 'raise ArgumentError as _id is a mandatory field' do
+        expect { subject }.to raise_error(ArgumentError, '_id is a mandatory field')
       end
     end
   end
