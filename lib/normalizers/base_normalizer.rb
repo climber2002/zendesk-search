@@ -1,23 +1,31 @@
+require_relative './normalizing_error'
+
 ##
 # This is the base class for all normalizers, it provides some basic functionalities
 # which are common for all subclasses
 module BaseNormalizer
 
-  # if search_query is nil or emtpy string it returns nil ,otherwise subclasses should implement
-  # `normalize_search_query_impl`. This function should never raise exception so if the search_query
-  # can't be normalized then just return the original search_query
-  def normalize_search_query(search_query)
-    return nil if String(search_query).empty?
+  # Normalize a field value. If field_value is empty, for example, nil or empty string it
+  # returns nil, if any errors during normalizing, it will raise NormalizingError.
+  # Subclasses should implement `normalize_field_impl`
+  def normalize_field(field_value)
+    return nil if empty?(field_value)
 
-    normalize_search_query_impl(search_query)
+    normalize_field_impl(field_value)
   rescue StandardError
-    search_query
+    raise NormalizingError, "The field value can't be normailized: #{field_value}"
+  end
+
+  # Normailze a search query. The `search_query` is usually a string input by the user. By default it
+  # just delegate to `normalize_field`, however the logic is a bit different if the field is an array.
+  def normalize_search_query(search_query)
+    normalize_field(search_query)
   end
 
   private
 
-  # By default the `normalize_search_query_impl` just calls `normalize_field_value`
-  def normalize_search_query_impl(search_query)
-    normalize_field(search_query)
+  # If field_value is nil or an empty string or an empty array, then return true
+  def empty?(field_value)
+    field_value.nil? || (field_value.respond_to?(:empty?) && field_value.empty?)
   end
 end

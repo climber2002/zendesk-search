@@ -8,7 +8,7 @@ class BooleanNormalizer
   FALSE_VALUES = [false, 'false']
   TRUE_VALUES = [true, 'true']
 
-  def normalize_field(value)
+  def normalize_field_impl(value)
     if FALSE_VALUES.include?(value)
       false
     elsif TRUE_VALUES.include?(value)

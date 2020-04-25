@@ -6,11 +6,12 @@ require_relative './normalizers/null_normalizer'
 require_relative './normalizers/text_normalizer.rb'
 
 ##
-# This module just declares some constants for each normalizer we need. There are two places that we need normalize:
+# This module just declares some constants for each normalizer we need. There are two places that we need do normalization:
 # 1. When indexing fields of an entity, for example we might want to normalize `MegaCörp` to `megacorp`, or normalize
 #    a datetime string into a datetime object so we can perform range search
 # 2. When the user inputs a search query, we need to also normalize the query first using the same logic when indexing
 #    the field before we do the search, otherwise we can't match the terms
+#
 # So we require each normalizer implements two methods,
 # - normalize_field: This is called when indexing an entity, it can throw exception to show that the field value is not valid
 # - normalize_search_query: Usually the search query is a string, and we need to normalize it into a value that we can 

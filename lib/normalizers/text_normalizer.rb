@@ -15,7 +15,7 @@ class TextNormalizer
   # "Equivalent" ASCII characters
   EQUIVALENT_ASCII_CHARS = 'AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz'
 
-  def normalize_field(value)
+  def normalize_field_impl(value)
     replace_non_characters(value).gsub(/[[:punct:]]/, '').downcase
   end
 
