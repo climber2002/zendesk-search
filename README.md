@@ -135,7 +135,7 @@ One problem for this solution is that we can't identify dirty data when add enti
 
 ### Runner and Command
 
-The entrypoint of this app is the `Runner` class, which just accept user input from console and transform the input into corresponding command and then execute it. Currently we have two `Command` class in `lib/commands/` folder,
+The entrypoint of this app is the `Runner` class, which firstly creates a `SearchManager` instance from the json files, and then just accept user input from console and transform the input into corresponding command and then execute it. Currently we have two `Command` class in `lib/commands/` folder,
 
 - SearchFieldCommand: This is to do search
 - ListSearchableFieldsCommand: This is to list searchable fields for each entity type.
