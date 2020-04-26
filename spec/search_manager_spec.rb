@@ -12,7 +12,7 @@ describe SearchManager do
   end
 
   describe '#search_entities' do
-    it 'can search users' do
+    it 'can search users with enriched fields' do
       expected = [
         {
           '_id'                 => 1,
