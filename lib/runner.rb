@@ -18,7 +18,6 @@ class Runner
 
     while (line = $stdin.readline.chomp) && !quit_command?(line)
       run_command(line)
-      print_usage
     end
     puts "\nBye!"
   end
