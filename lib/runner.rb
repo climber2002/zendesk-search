@@ -15,7 +15,6 @@ class Runner
   def run
     puts 'Welcome to Zendesk Search'
     puts "Type 'quit' to exit at any time, Press 'Enter' to continue"
-    $stdin.readline
     print_hint
 
     while (line = $stdin.readline.chomp) && !quit_command?(line)

@@ -1,3 +1,5 @@
+require_relative '../search_error'
+
 class SearchFieldCommand
   def initialize(search_manager)
     @search_manager = search_manager
@@ -13,6 +15,10 @@ class SearchFieldCommand
     read_field_to_search
     read_value_to_search
     search
+  rescue SearchError => error
+    puts "Error occured while searching: #{error.message}"
+  rescue StandardError => error
+    puts "Something is wrong: #{error.message}"
   end
 
   private
@@ -42,7 +48,7 @@ class SearchFieldCommand
   end
 
   def read_value_to_search
-    puts "Enter search value"
+    puts "Enter search value (just press Enter to search empty value)"
     @value_to_search = $stdin.readline.chomp
   end
 

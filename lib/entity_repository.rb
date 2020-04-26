@@ -31,7 +31,7 @@ class EntityRepository
   end
 
   def create_entity_store_for(entity_type_name)
-    entity_store = EntityStore.new
+    entity_store = EntityStore.new(entity_type_name)
     entity_stores[entity_type_name] = entity_store
     entity_store
   end
@@ -39,7 +39,8 @@ class EntityRepository
   # The EntityStore is a helper class which manages entities
   # for a particular type, it's only used inside EntityRepository
   class EntityStore
-    def initialize
+    def initialize(entity_type_name)
+      @entity_type_name = entity_type_name
       @entities = {}
     end
 
@@ -49,12 +50,12 @@ class EntityRepository
     end
 
     def fetch_entity_by(id)
-      entities.fetch(id) { |_| raise SearchError, "Id #{id} doesn't exist" }
+      entities.fetch(id) { |_| raise SearchError, "Id #{id} doesn't exist for #{entity_type_name}" }
     end
 
     private
 
-    attr_reader :entities
+    attr_reader :entity_type_name, :entities
 
     def contains?(entity)
       entities.key?(entity.id)

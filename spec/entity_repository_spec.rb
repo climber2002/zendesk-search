@@ -33,7 +33,7 @@ describe EntityRepository do
     end
 
     it 'raises SearchError if the entity type or entity id does NOT exist' do
-      expected_exception_msg = "Id 125 doesn't exist"
+      expected_exception_msg = "Id 125 doesn't exist for Organization"
       expect { subject.fetch_entity('Organization', 125) }.to raise_error(SearchError, expected_exception_msg)
     end
 
