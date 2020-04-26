@@ -14,7 +14,7 @@ The project has following sub-folders:
 
 ### Setup
 
-I use Ruby `2.6.3` to create this app but it should work with any version higher than `2.5.0`. The only dependency for this app is the `rspec` gem. If you already have `rspec` installed then all is setup. Otherwise `cd` into project directory and run following command to install `rspec` (All following commands assume the current directory is the project directory),
+I use Ruby `2.6.3` to create this app but it should work with any version higher than `2.5.0`. After installing Ruby the only dependency for this app is the `rspec` gem. If you already have `rspec` installed then all is setup. Otherwise `cd` into project directory and run following command to install `rspec` (All following commands assume the current directory is the project directory),
 
 ```bash
 bundle install
