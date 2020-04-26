@@ -123,4 +123,19 @@ The `EntityIndex` maintains a hash which maps from the `field_name` to its corre
 
 The `IndexRepository` class just maintains the `EntityIndex` for each entity type.
 
+### SearchManager
 
+The `SearchManager` is like the facade of the application which manages one `EntityRepository` and one `IndexRepository`. When add an entity it will add the entity into `entity_repository` and then index the entity in `index_repository`. This small app just does the two steps in a synchronous way. For a real system we can improve the indexing performance by indexing asynchronously, which means after add an entity to the `entity_repository` then send an event asynchronously to `index_repository` to do indexing.
+
+### FieldsEnricher
+
+The application requires that when return the search results it should also include fields from the related entities. To implement this we use `FieldsEnricher`, there is a class for each entity type since the logic is specific to the entity type. The source code for `FieldsEnricher` is in `lib/fields_enrichers/` subfolder. It get the related entities by calling `SearchManager` since SearchManager has all the information. And also the performance should be fast enough since we fetch the the related entities by id or search against id whose time complexity are both `O(1)`.
+
+One problem for this solution is that we can't identify dirty data when add entities. For example if add a ticket whose submitter_id doesn't exist, we can't prevent the invalid data to be saved, we can only identify it when doing search and find the related_id doesn't exist.
+
+### Runner and Command
+
+The entrypoint of this app is the `Runner` class, which just accept user input from console and transform the input into corresponding command and then execute it. Currently we have two `Command` class in `lib/commands/` folder,
+
+- SearchFieldCommand: This is to do search
+- ListSearchableFieldsCommand: This is to list searchable fields for each entity type.
