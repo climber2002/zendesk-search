@@ -3,11 +3,7 @@ require_relative '../search_error'
 class SearchFieldCommand
   def initialize(search_manager)
     @search_manager = search_manager
-    @entity_type_names = { 
-      '1' => 'User',
-      '2' => 'Ticket',
-      '3' => 'Organization'
-     }
+    @entity_type_names = { '1' => 'User', '2' => 'Ticket', '3' => 'Organization' }
   end
 
   def run
@@ -27,11 +23,11 @@ class SearchFieldCommand
   attr_reader :entity_type_to_search, :field_to_search, :value_to_search
 
   def read_entity_type_to_search
-    print_select_entity_type_hint
+    print_select_entity_type_instruction
     @entity_type_to_search = entity_type_names[$stdin.readline.chomp]
-    while(@entity_type_to_search.nil?)
+    until entity_type_to_search_valid?
       puts "Not valid selection"
-      print_select_entity_type_hint
+      print_select_entity_type_instruction
       @entity_type_to_search = entity_type_names[$stdin.readline.chomp]
     end
   end
@@ -39,7 +35,7 @@ class SearchFieldCommand
   def read_field_to_search
     puts "Enter search field"
     @field_to_search = $stdin.readline.chomp
-    while(!searchable?)
+    until field_to_seach_valid?
       puts "Invalid field, only the following fields are allowed"
       print_searchable_fields
       puts "Enter search field"
@@ -52,11 +48,15 @@ class SearchFieldCommand
     @value_to_search = $stdin.readline.chomp
   end
 
-  def print_select_entity_type_hint
+  def print_select_entity_type_instruction
     puts "Select 1) Users or 2) Tickets or 3) Organizations"
   end
 
-  def searchable?
+  def entity_type_to_search_valid?
+    !entity_type_to_search.nil?
+  end
+
+  def field_to_seach_valid?
     searchable_fields.include?(field_to_search)
   end
 
@@ -82,7 +82,7 @@ class SearchFieldCommand
   end
 
   def print_search_result(search_result)
-    puts "Found #{search_result.count} results"
+    puts "Found #{search_result.count} result(s)"
     search_result.each do |entity_fields|
       puts '---------------------------------------------------'
       entity_fields.each do |field_name, field_value|

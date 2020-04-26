@@ -7,7 +7,6 @@ require_relative './commands/list_searchable_fields_command'
 ##
 # This is the entrypoint of the console application
 class Runner
-
   def initialize
     initialize_search_manager
   end
@@ -15,19 +14,20 @@ class Runner
   def run
     puts 'Welcome to Zendesk Search'
     puts "Type 'quit' to exit at any time, Press 'Enter' to continue"
-    print_hint
+    print_usage
 
     while (line = $stdin.readline.chomp) && !quit_command?(line)
       run_command(line)
-      print_hint
+      print_usage
     end
+    puts "\nBye!"
   end
 
   private
 
   attr_reader :search_manager
 
-  def print_hint
+  def print_usage
     2.times { puts '' }
     puts "\tSelect search options:"
     puts "\t * Press 1 and 'Enter' to search Zendesk"
@@ -42,7 +42,7 @@ class Runner
       ListSearchableFieldsCommand.new(search_manager).run
     else
       puts 'Unknown command'
-      print_hint
+      print_usage
     end
   end
 
