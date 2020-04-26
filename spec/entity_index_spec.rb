@@ -20,7 +20,7 @@ describe EntityIndex do
   describe 'search organizations' do
     let(:fixture_file) { 'organizations.json' }
     let(:entity_type) { EntityType::ORGANIZATION_TYPE }
-    let(:normalizers) { described_class::ORGANIZATION_NORMALIZERS }
+    let(:normalizers) { Normalizer::ORGANIZATION_NORMALIZERS }
 
     it 'raises error if the field is not recognizable' do
       expect { subject.search('not_exist', 'abcd') }.to raise_error(SearchError)
@@ -68,7 +68,7 @@ describe EntityIndex do
   describe 'search users' do
     let(:fixture_file) { 'users.json' }
     let(:entity_type) { EntityType::USER_TYPE }
-    let(:normalizers) { described_class::USER_NORMALIZERS }
+    let(:normalizers) { Normalizer::USER_NORMALIZERS }
 
     it 'can search organization_id' do
       expect(subject.search('organization_id', '119')).to eq [1]
@@ -89,7 +89,7 @@ describe EntityIndex do
   describe 'search tickets' do
     let(:fixture_file) { 'tickets.json' }
     let(:entity_type) { EntityType::TICKET_TYPE }
-    let(:normalizers) { described_class::TICKET_NORMALIZERS }
+    let(:normalizers) { Normalizer::TICKET_NORMALIZERS }
 
     it 'can search _id by full match' do
       expect(subject.search('_id', '436bf9b0-1147-4c0a-8439-6f79833bff5b')).to eq ['436bf9b0-1147-4c0a-8439-6f79833bff5b']

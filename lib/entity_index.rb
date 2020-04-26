@@ -7,59 +7,9 @@ require_relative './search_error'
 # it should be passed a list of normalizers so each searchable field has its own normalizer,
 # check the comments in normalizer to find out why we need normalizer
 class EntityIndex
-  ORGANIZATION_NORMALIZERS = {
-    '_id'               => Normalizer::INTEGER_NORMALIZER,
-    'url'               => Normalizer::NULL_NORMALIZER,
-    'external_id'       => Normalizer::NULL_NORMALIZER,
-    'name'              => Normalizer::TEXT_NORMALIZER,
-    'domain_names'      => Normalizer::NULL_ARRAY_NORMALIZER,
-    'created_at'        => Normalizer::DATE_TIME_NORMALIZER,
-    'details'           => Normalizer::TEXT_NORMALIZER,
-    'shared_tickets'    => Normalizer::BOOLEAN_NORMALIZER,
-    'tags'              => Normalizer::TEXT_ARRAY_NORMALIZER
-  }
 
-  USER_NORMALIZERS = {
-    '_id'               => Normalizer::INTEGER_NORMALIZER,
-    'url'               => Normalizer::NULL_NORMALIZER,
-    'external_id'       => Normalizer::NULL_NORMALIZER,
-    'name'              => Normalizer::TEXT_NORMALIZER,
-    'alias'             => Normalizer::TEXT_NORMALIZER,
-    'created_at'        => Normalizer::DATE_TIME_NORMALIZER,
-    'active'            => Normalizer::BOOLEAN_NORMALIZER,
-    'verified'          => Normalizer::BOOLEAN_NORMALIZER,
-    'shared'            => Normalizer::BOOLEAN_NORMALIZER,
-    'locale'            => Normalizer::TEXT_NORMALIZER,
-    'timezone'          => Normalizer::TEXT_NORMALIZER,
-    'last_login_at'     => Normalizer::DATE_TIME_NORMALIZER,
-    'email'             => Normalizer::NULL_NORMALIZER,
-    'phone'             => Normalizer::TEXT_NORMALIZER,
-    'signature'         => Normalizer::TEXT_NORMALIZER,
-    'organization_id'   => Normalizer::INTEGER_NORMALIZER,
-    'tags'              => Normalizer::TEXT_ARRAY_NORMALIZER,
-    'suspended'         => Normalizer::BOOLEAN_NORMALIZER,
-    'role'              => Normalizer::TEXT_NORMALIZER
-  }
-
-  TICKET_NORMALIZERS = {
-    '_id'               => Normalizer::NULL_NORMALIZER,
-    'url'               => Normalizer::NULL_NORMALIZER,
-    'external_id'       => Normalizer::NULL_NORMALIZER,
-    'created_at'        => Normalizer::DATE_TIME_NORMALIZER,
-    'type'              => Normalizer::TEXT_NORMALIZER,
-    'subject'           => Normalizer::TEXT_NORMALIZER,
-    'description'       => Normalizer::TEXT_NORMALIZER,
-    'priority'          => Normalizer::TEXT_NORMALIZER,
-    'status'            => Normalizer::TEXT_NORMALIZER,
-    'submitter_id'      => Normalizer::INTEGER_NORMALIZER,
-    'assignee_id'       => Normalizer::INTEGER_NORMALIZER,
-    'organization_id'   => Normalizer::INTEGER_NORMALIZER,
-    'tags'              => Normalizer::TEXT_ARRAY_NORMALIZER,
-    'has_incidents'     => Normalizer::BOOLEAN_NORMALIZER,
-    'due_at'            => Normalizer::DATE_TIME_NORMALIZER,
-    'via'               => Normalizer::TEXT_NORMALIZER
-  }
-
+  ##
+  # The field_normaizers is a hash which maps the field_name to the corresponding normalizer
   def initialize(field_normalizers)
     @field_normalizers = field_normalizers
     @field_indices = field_normalizers.reduce({}) do |indices, (field_name, _)|

@@ -26,5 +26,58 @@ module Normalizer
   TEXT_NORMALIZER           = TextNormalizer.instance
   TEXT_ARRAY_NORMALIZER     = ArrayNormalizer.new(TEXT_NORMALIZER) # e.g. tags should be normalized as text
   NULL_ARRAY_NORMALIZER     = ArrayNormalizer.new(NULL_NORMALIZER) # e.g. domain_names shouldn't drop the '.'
+
+  ORGANIZATION_NORMALIZERS = {
+    '_id'               => INTEGER_NORMALIZER,
+    'url'               => NULL_NORMALIZER,
+    'external_id'       => NULL_NORMALIZER,
+    'name'              => TEXT_NORMALIZER,
+    'domain_names'      => NULL_ARRAY_NORMALIZER,
+    'created_at'        => DATE_TIME_NORMALIZER,
+    'details'           => TEXT_NORMALIZER,
+    'shared_tickets'    => BOOLEAN_NORMALIZER,
+    'tags'              => TEXT_ARRAY_NORMALIZER
+  }
+
+  USER_NORMALIZERS = {
+    '_id'               => INTEGER_NORMALIZER,
+    'url'               => NULL_NORMALIZER,
+    'external_id'       => NULL_NORMALIZER,
+    'name'              => TEXT_NORMALIZER,
+    'alias'             => TEXT_NORMALIZER,
+    'created_at'        => DATE_TIME_NORMALIZER,
+    'active'            => BOOLEAN_NORMALIZER,
+    'verified'          => BOOLEAN_NORMALIZER,
+    'shared'            => BOOLEAN_NORMALIZER,
+    'locale'            => TEXT_NORMALIZER,
+    'timezone'          => TEXT_NORMALIZER,
+    'last_login_at'     => DATE_TIME_NORMALIZER,
+    'email'             => NULL_NORMALIZER,
+    'phone'             => TEXT_NORMALIZER,
+    'signature'         => TEXT_NORMALIZER,
+    'organization_id'   => INTEGER_NORMALIZER,
+    'tags'              => TEXT_ARRAY_NORMALIZER,
+    'suspended'         => BOOLEAN_NORMALIZER,
+    'role'              => TEXT_NORMALIZER
+  }
+
+  TICKET_NORMALIZERS = {
+    '_id'               => NULL_NORMALIZER,
+    'url'               => NULL_NORMALIZER,
+    'external_id'       => NULL_NORMALIZER,
+    'created_at'        => DATE_TIME_NORMALIZER,
+    'type'              => TEXT_NORMALIZER,
+    'subject'           => TEXT_NORMALIZER,
+    'description'       => TEXT_NORMALIZER,
+    'priority'          => TEXT_NORMALIZER,
+    'status'            => TEXT_NORMALIZER,
+    'submitter_id'      => INTEGER_NORMALIZER,
+    'assignee_id'       => INTEGER_NORMALIZER,
+    'organization_id'   => INTEGER_NORMALIZER,
+    'tags'              => TEXT_ARRAY_NORMALIZER,
+    'has_incidents'     => BOOLEAN_NORMALIZER,
+    'due_at'            => DATE_TIME_NORMALIZER,
+    'via'               => TEXT_NORMALIZER
+  }
 end
 
