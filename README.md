@@ -49,7 +49,7 @@ The application made following assumptions:
     - If the field type is string and the field value is empty string
     - If the field type is an array and the field value is empty array, e.g. empty tags
 
-3. According to the requirement the application only needs to do `full value matching`, which means that when search a field value it will only include the result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
+3. According to the requirement the application only needs to do `full value matching`, which means that when search a field value it will only include the entity in search result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
     - `megacorp` will find `MegaCorp` and `MegaCörp` and vice versa
     - `a nuisance in cote divoire ivory coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)` and vice versa
     - `Don't Worry Be Happy!` will find `dont worry be happy` and vice versa
