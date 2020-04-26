@@ -32,7 +32,7 @@ rspec
 
 ### Run the application
 
-To run the application run following command and then following instructions,
+To run the application run following command and then follow the instructions,
 
 ```
 ./bin/zendesk-search
@@ -42,18 +42,19 @@ To run the application run following command and then following instructions,
 
 The application made following assumptions:
 
-1. When the search result is not empty, values from any related entities will be included in the results. For example, searching tickets will also return the ticket's submitter, assignee and organization. If the related entity can't be found by the related id, the application assumes it's dirty data and will print an error message. For example if search `Ticket(_id=bc736a06-eeb0-4271-b4a8-c66f61b5df1f)`, it will print error `Error occured while searching: Id 555 doesn't exist for User` because the ticket's `submitter_id` is `555` and in `users.json` there is no user whose id is 555.
+1. When the search result is not empty, values from any related entities will be included in the results. For example, searching tickets will also return the ticket's submitter, assignee and organization. If the related entity can't be found by the related entity id, the application assumes it's dirty data and will print an error message. For example if search `Ticket(_id=bc736a06-eeb0-4271-b4a8-c66f61b5df1f)`, it will print error `Error occured while searching: Id 555 doesn't exist for User` because the ticket's `submitter_id` is `555` but in `users.json` there is no user whose id is 555.
 
 2. The application can search empty values, when the application asks the user to input the search value, if the user just press Enter the application will search empty values. The application assumes that following 3 cases are all empty values:
-    - If the field is missing in the JSON
+    - If the field is missing in the json file
     - If the field type is string and the field value is empty string
     - If the field type is an array and the field value is empty array, e.g. empty tags
 
-3. As the requirement the application just does `full value matching`. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the some special Latin characters such as á,è,î,õ and ü will be converted to corresponding ASCII characters, which means,
+3. Following the requirement the application just does `full value matching`, which means that when search a field value it will only include the result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
     - `megacorp` will find `MegaCorp` and `MegaCörp`
     - `a nuisance in cote divoire ivory coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)`
+    - `A Nuisance in Cote D'Ivoire Ivory Coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)`
 
-4. For fields which are array, a value matching any element in the array will find the entity. For example, search `tags=Oregon` will find the entity whose tag is `['Oregon', 'Arizona', 'Delaware']`.
+4. For fields which are array, a value that matches any element in the array will find the entity. For example, search `tags=Oregon` will find the entity whose tag is `['Oregon', 'Arizona', 'Delaware']`.
 
-5. For datetime fields such as created_at, the application assumes it's a match if it's the same datetime. For example, `2016-07-28T11:26:16 -09:00` will match `2016-07-28T10:26:16 -10:00` as the two values mean same datetime even though the timezone is different.
+5. For datetime fields such as `created_at`, the application assumes it's a match if it's the same datetime. For example, `2016-07-28T11:26:16 -09:00` will match `2016-07-28T10:26:16 -10:00` as the two values mean same datetime even though the timezone is different.
 
