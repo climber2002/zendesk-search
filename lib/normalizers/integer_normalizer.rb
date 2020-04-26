@@ -5,7 +5,7 @@ class IntegerNormalizer
   include Singleton
   include BaseNormalizer
 
-  def normalize_field_impl(value)
+  def normalize_field_value_impl(value)
     Integer(value)
   end
 end

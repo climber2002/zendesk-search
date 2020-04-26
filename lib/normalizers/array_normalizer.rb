@@ -7,14 +7,14 @@ class ArrayNormalizer
     @element_normalizer = element_normalizer
   end
 
-  def normalize_field_impl(value)
+  def normalize_field_value_impl(value)
     Array(value).map do |element|
-      element_normalizer.normalize_field(element)
+      element_normalizer.normalize_field_value(element)
     end
   end
 
-  def normalize_search_query(search_query)
-    element_normalizer.normalize_search_query(search_query)
+  def normalize_search_term(search_term)
+    element_normalizer.normalize_search_term(search_term)
   end
 
   private

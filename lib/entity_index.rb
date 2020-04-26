@@ -38,7 +38,7 @@ class EntityIndex
 
   def search(field_name, search_term)
     normalizer = normalizer_for(field_name)
-    normalized_term = normalizer.normalize_search_query(search_term)
+    normalized_term = normalizer.normalize_search_term(search_term)
     index_for(field_name).search(normalized_term)
   rescue NormalizingError
     # if any error normalizing, for example search 'abcd' against an interger field, just return empty result
@@ -50,7 +50,7 @@ class EntityIndex
   attr_reader :field_normalizers, :field_indices
 
   def index_field(field_name, field_value, normalizer, entity_id)
-    normalized_value = normalizer.normalize_field(field_value)
+    normalized_value = normalizer.normalize_field_value(field_value)
     tokenized_terms = tokenize(normalized_value)
     field_index = index_for(field_name)
     field_index.index(tokenized_terms, entity_id)

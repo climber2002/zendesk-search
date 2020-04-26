@@ -13,8 +13,8 @@ require_relative './normalizers/text_normalizer.rb'
 #    the field before we do the search, otherwise we can't match the terms
 #
 # So we require each normalizer implements two methods,
-# - normalize_field: This is called when indexing an entity, it can throw exception to show that the field value is not valid
-# - normalize_search_query: Usually the search query is a string, and we need to normalize it into a value that we can 
+# - normalize_field_value: This is called when indexing an entity, it can throw exception to show that the field value is not valid
+# - normalize_search_term: Usually the search term is a string, and we need to normalize it into a value that we can 
 #   do comparision with the terms stored in inverted_index
 #
 # For each normalizer's implementation, check `normailizers` folder
