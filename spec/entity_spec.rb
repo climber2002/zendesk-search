@@ -6,24 +6,24 @@ describe Entity do
 
   let(:organization_fields) do
     {
-      "_id" => 101,
-      "url" => "http://initech.zendesk.com/api/v2/organizations/101.json",
-      "external_id" => "9270ed79-35eb-4a38-a46f-35725197ea8d",
-      "name" => "Enthaze",
-      "domain_names" => [
-        "kage.com",
-        "ecratic.com",
-        "endipin.com",
-        "zentix.com"
+      '_id' => 101,
+      'url' => 'http://initech.zendesk.com/api/v2/organizations/101.json',
+      'external_id' => '9270ed79-35eb-4a38-a46f-35725197ea8d',
+      'name' => 'Enthaze',
+      'domain_names' => [
+        'kage.com',
+        'ecratic.com',
+        'endipin.com',
+        'zentix.com'
       ],
-      "created_at" => "2016-05-21T11:10:28 -10:00",
-      "details" => "MegaCorp",
-      "shared_tickets" => false,
-      "tags" => [
-        "Fulton",
-        "West",
-        "Rodriguez",
-        "Farley"
+      'created_at' => '2016-05-21T11:10:28 -10:00',
+      'details' => 'MegaCorp',
+      'shared_tickets' => false,
+      'tags' => [
+        'Fulton',
+        'West',
+        'Rodriguez',
+        'Farley'
       ]
     }
   end
@@ -44,7 +44,7 @@ describe Entity do
     end
 
     context 'when the fields contain some unsupported fields' do
-      let(:fields) { organization_fields.merge("inrelevant" => "nothing") }
+      let(:fields) { organization_fields.merge('inrelevant' => 'nothing') }
 
       it 'ignores the fields whose field name is not defined in entity_type' do
         expect(subject.fields).to eq organization_fields
@@ -79,5 +79,17 @@ describe Entity do
     subject { described_class.new(organization_type, organization_fields) }
 
     it { expect(subject.entity_type_name).to eq 'Organization' }
+  end
+
+  describe '#field_value_for' do
+    subject { described_class.new(organization_type, organization_fields) }
+
+    it 'returns the field value if exists' do
+      expect(subject.field_value_for('created_at')).to eq '2016-05-21T11:10:28 -10:00'
+    end
+
+    it 'returns nil if the field value not exists' do
+      expect(subject.field_value_for('nonexist')).to be_nil
+    end
   end
 end

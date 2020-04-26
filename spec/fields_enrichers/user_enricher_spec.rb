@@ -9,9 +9,9 @@ describe UserEnricher do
   describe '#additional_fields_for' do
     it 'returns corresponding additional fields' do
       additional_fields = { 
-        'submitted_ticket_0'  => 'A Catastrophe in Macau',
-        'assigned_ticket_0'  => 'A Catastrophe in Pakistan',
-        'organization'    => 'Xylar'
+        'submitted_ticket_0'    => 'A Catastrophe in Macau',
+        'assigned_ticket_0'     => 'A Catastrophe in Pakistan',
+        'organization_name'     => 'Xylar'
       }
       user = search_manager.fetch_entity('User', 2)
       expect(subject.enriched_fields(user)).to eq(user.fields.merge(additional_fields))

@@ -3,9 +3,9 @@ require_relative './base_fields_enricher'
 class UserEnricher < BaseFieldsEnricher
   def additional_fields_for(user)
     result = {}
+    result.merge!(related_entity_name(user, 'organization', 'Organization'))
     result.merge!(submitted_tickets(user.id))
     result.merge!(assigned_tickets(user.id))
-    result.merge!(related_entity_field(user, 'organization', 'Organization'))
     result
   end
 

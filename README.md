@@ -131,9 +131,11 @@ The `SearchManager` is like the facade of the application which manages one `Ent
 
 ### FieldsEnricher
 
-The application requires that when return the search results it should also include fields from the related entities. To implement this we use `FieldsEnricher`, there is a `FieldsEnricher` class for each entity type since each entity type needs to be enriched differently. The source code for `FieldsEnricher` is in `lib/fields_enrichers/` subfolder. It get the related entities by calling `SearchManager` since SearchManager has all the information. And also the performance should be fast enough since whether we fetch the the related entities by id or search against id the time complexity is always *roughly* `O(1)`.
+The application requires that when return the search results it should also include fields from the related entities. To implement this we use `FieldsEnricher`, which is to enrich entities' fields from `SearchManager`.
 
-One problem for this solution is that we can't identify dirty data when add entities. For example if add a ticket whose submitter_id doesn't exist, we can't prevent the invalid data to be saved in repository, we can only identify it when doing search and find the related_id doesn't exist.
+There is a `FieldsEnricher` class for each entity type since each entity type needs to be enriched in its own way. The source code for all enrichers is in `lib/fields_enrichers/` subfolder. It get the related entities by calling `SearchManager` since SearchManager has all the information we need. The performance might not be as good as if we store the related entities together, but it should be fast enough since whether we fetch the the related entities by id or search against an id the time complexity is always *roughly* `O(1)`.
+
+One problem for this solution is that we can't identify dirty data when add entities. For example if add a ticket whose submitter_id doesn't exist, we can't prevent the invalid data to be saved in repository, we can only find it out when doing search.
 
 ### Runner and Command
 

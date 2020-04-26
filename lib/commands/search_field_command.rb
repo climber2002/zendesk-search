@@ -70,6 +70,7 @@ class SearchFieldCommand
 
   def search
     puts ''
+    print_searching_info
     search_result = search_manager.search_entities(entity_type_to_search, field_to_search, value_to_search)
     if(search_result.empty?)
       puts 'No results found'
@@ -77,6 +78,15 @@ class SearchFieldCommand
       print_search_result(search_result)
     end
     puts ''
+  end
+
+  def print_searching_info
+    info = if value_to_search.empty?
+      "Searching #{entity_type_to_search.downcase}s for #{field_to_search} with empty value"
+    else
+      "Searching #{entity_type_to_search.downcase}s for #{field_to_search} with a value of #{value_to_search}"
+    end
+    puts info
   end
 
   def print_search_result(search_result)

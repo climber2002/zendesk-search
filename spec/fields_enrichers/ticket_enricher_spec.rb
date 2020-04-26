@@ -10,9 +10,9 @@ describe TicketEnricher do
   describe '#additional_fields_for' do
     it 'returns corresponding additional fields' do
       additional_fields = { 
-        'submitter'  => 'Francisca Rasmussen',
-        'assignee'  => 'Cross Barlow',
-        'organization'    => 'Enthaze'
+        'submitter_name'      => 'Francisca Rasmussen',
+        'assignee_name'       => 'Cross Barlow',
+        'organization_name'   => 'Enthaze'
       }
       ticket = search_manager.fetch_entity('Ticket', '81bdd837-e955-4aa4-a971-ef1e3b373c6d')
       expect(subject.enriched_fields(ticket)).to eq(ticket.fields.merge(additional_fields))

@@ -25,7 +25,7 @@ describe SearchManager do
           'last_login_at'       => '2013-08-04T01:03:27 -10:00',
           'locale'              => 'en-AU',
           'name'                => 'Francisca Rasmussen',
-          'organization'        => 'Enthaze',
+          'organization_name'   => 'Enthaze',
           'organization_id'     => 101,
           'phone'               => '8335-422-718',
           'role'                => 'admin',
