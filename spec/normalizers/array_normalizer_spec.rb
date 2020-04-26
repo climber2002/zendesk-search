@@ -8,6 +8,13 @@ describe ArrayNormalizer do
       tags = ['South Carolina', 'Indiana', 'New Mexico', 'Nebraska']
       expect(subject.normalize_field_value(tags)).to eq ['south carolina', 'indiana', 'new mexico', 'nebraska']
     end
+
+    it 'thinks nil is empty value' do
+      expect(subject.normalize_field_value(nil)).to be_nil
+    end
+    it 'thinks empty array is empty value' do
+      expect(subject.normalize_field_value([])).to be_nil
+    end
   end
 
   describe '#normalize_search_term' do

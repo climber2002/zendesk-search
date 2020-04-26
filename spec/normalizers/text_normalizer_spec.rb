@@ -4,6 +4,8 @@ describe TextNormalizer do
   subject { described_class.instance }
 
   describe '#normalize_field_value' do
+    it { expect(subject.normalize_field_value(nil)).to be_nil }
+
     it 'lower case' do
       expect(subject.normalize_field_value('Armstrong')).to eq 'armstrong'
     end

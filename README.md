@@ -1,6 +1,6 @@
-# Zendesk Search Coding Challange
+# Zendesk Search Coding Challenge
 
-This is a Ruby solution to Zendesk Search coding challange and it's created by Andy Wang (climber2002@gmail.com)
+This is a Ruby solution to Zendesk Search coding challenge and it's created by Andy Wang (climber2002@gmail.com)
 
 ## Setup and Running
 
@@ -42,7 +42,7 @@ To run the application run following command and then follow the instructions,
 
 The application made following assumptions:
 
-1. When the search result is not empty, values from any related entities will be included in the results. For example, searching tickets will also return the ticket's submitter, assignee and organization. If the related entity can't be found by the related entity id, the application assumes it's dirty data and will print an error message. For example if search `Ticket(_id=bc736a06-eeb0-4271-b4a8-c66f61b5df1f)`, it will print error `Error occured while searching: Id 555 doesn't exist for User` because the ticket's `submitter_id` is `555` but in `users.json` there is no user whose id is 555.
+1. When the search result is not empty, values from any related entities will be included in the results. For example, searching tickets will also return the ticket's submitter, assignee and organization. If the related entity can't be found by the related entity id, the application assumes it's dirty data and will print an error message. For example if search `Ticket(_id=bc736a06-eeb0-4271-b4a8-c66f61b5df1f)`, it will print error `Error occurred while searching: Id 555 doesn't exist for User` because the ticket's `submitter_id` is `555` but in `users.json` there is no user whose id is 555.
 
 2. The application can search empty values, when the application asks the user to input the search value, if the user just press Enter the application will search empty values. The application assumes that following 3 cases are all empty values:
     - If the field is missing in the json file
@@ -62,7 +62,7 @@ The application made following assumptions:
 
 In this section I'll explain the main modules and discuss the tradeoffs.
 
-The application is splitted into two main modules: `EntityRepository` and `IndexRepository`, and there are other helper modules such as `FieldsEnricher`. We will explain the modules one by one.
+The application is designed with several components. The two main ones are `EntityRepository` and `IndexRepository`, and there are other helper components such as `FieldsEnricher`. We will explain the components one by one.
 
 ### EntityRepository
 
@@ -73,7 +73,7 @@ As the search result must include all fields of the entities, after we load the 
 Initially I thought to create a distinct class for each entity type `Organization`, `User` and `Ticket`, however I found that these entities just stores the fields and don't have much business logic. So I decided to just create a generic `EntityType` and `Entity` class. The `EntityType` defines the name of the entity type and supported fields. And `Entity` objects represent instances of a particular `EntityType`.
 
 #### EntityRepository
-The `EntityRespository` is just a repository which stores all entities. Each `EntityType` has its own entity store. And in the entity store the entities are saved in a hash which maps entity id to entity, so the time complexity is `O(1)` when fetch an entity by id.
+The `EntityRepository` is just a repository which stores all entities. Each `EntityType` has its own entity store. And in the entity store the entities are saved in a hash which maps entity id to entity, so the time complexity is `O(1)` when fetch an entity by id.
 
 ### IndexRepository
 
@@ -133,13 +133,13 @@ The `SearchManager` is like the facade of the application which manages one `Ent
 
 The application requires that when return the search results it should also include fields from the related entities. To implement this we use `FieldsEnricher`, which is to enrich entities' fields from `SearchManager`.
 
-There is a `FieldsEnricher` class for each entity type since each entity type needs to be enriched in its own way. The source code for all enrichers is in `lib/fields_enrichers/` subfolder. It get the related entities by calling `SearchManager` since SearchManager has all the information we need. The performance might not be as good as if we store the related entities together, but it should be fast enough since whether we fetch the the related entities by id or search against an id the time complexity is always *roughly* `O(1)`.
+There is a `FieldsEnricher` class for each entity type since each entity type needs to be enriched in its own way. The source code for all enrichers is in `lib/fields_enrichers/` sub-folder. It get the related entities by calling `SearchManager` since SearchManager has all the information we need. The performance might not be as good as if we store the related entities together, but it should be fast enough since whether we fetch the the related entities by id or search against an id the time complexity is always *roughly* `O(1)`.
 
 One problem for this solution is that we can't identify dirty data when add entities. For example if add a ticket whose submitter_id doesn't exist, we can't prevent the invalid data to be saved in repository, we can only find it out when doing search.
 
 ### Runner and Command
 
-The entrypoint of this app is the `Runner` class, which firstly creates a `SearchManager` instance from the json files, and then just accept user input from console and transform the input into corresponding command and then execute it. Currently we have two `Command` classes in `lib/commands/` folder,
+The entry point of this app is the `Runner` class which creates a `SearchManager` instance from the json files when initialized. After initialization it just waits for user input from console. Each line of valid user input will be converted into a command object and then executed. Currently we have two `Command` classes in `lib/commands/` folder,
 
 - SearchFieldCommand: This is to do search
 - ListSearchableFieldsCommand: This is to list searchable fields for each entity type.

@@ -4,6 +4,7 @@ describe BooleanNormalizer do
   subject { BooleanNormalizer.instance }
 
   describe '#normalize_field_value' do
+    it { expect(subject.normalize_field_value(nil)).to be_nil }
     it { expect(subject.normalize_field_value(true)).to eq true }
     it { expect(subject.normalize_field_value('true')).to eq true }
     it { expect(subject.normalize_field_value(false)).to eq false }

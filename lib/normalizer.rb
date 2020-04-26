@@ -3,7 +3,7 @@ require_relative './normalizers/boolean_normalizer'
 require_relative './normalizers/date_time_normalizer'
 require_relative './normalizers/integer_normalizer'
 require_relative './normalizers/null_normalizer'
-require_relative './normalizers/text_normalizer.rb'
+require_relative './normalizers/text_normalizer'
 
 ##
 # This module just declares some constants for each normalizer we need. There are two places that we need do normalization:

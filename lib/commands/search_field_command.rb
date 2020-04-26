@@ -12,7 +12,7 @@ class SearchFieldCommand
     read_value_to_search
     search
   rescue SearchError => exception
-    puts "Error occured while searching: #{exception.message}"
+    puts "Error occurred while searching: #{exception.message}"
   end
 
   private
