@@ -17,7 +17,12 @@ class Runner
     print_usage
 
     while (line = $stdin.readline.chomp) && !quit_command?(line)
-      run_command(line)
+      begin
+        run_command(line)
+      rescue StandardError => exception
+        puts "Something is wrong: #{exception.message}"
+        puts exception.backtrace
+      end
     end
     puts "\nBye!"
   end

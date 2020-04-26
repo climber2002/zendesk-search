@@ -11,10 +11,8 @@ class SearchFieldCommand
     read_field_to_search
     read_value_to_search
     search
-  rescue SearchError => error
-    puts "Error occured while searching: #{error.message}"
-  rescue StandardError => error
-    puts "Something is wrong: #{error.message}"
+  rescue SearchError => exception
+    puts "Error occured while searching: #{exception.message}"
   end
 
   private
