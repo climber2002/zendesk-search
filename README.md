@@ -24,7 +24,7 @@ If it throws errors such as `ERROR:  While executing gem ... (Gem::FilePermissio
 
 ### Run all tests
 
-The project uses `rspec` as the test framework. Just run all specs by running following command,
+The project uses `rspec` as the test framework. Run following command to run all the tests:
 
 ```bash
 rspec
