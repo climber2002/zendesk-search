@@ -49,10 +49,10 @@ The application made following assumptions:
     - If the field type is string and the field value is empty string
     - If the field type is an array and the field value is empty array, e.g. empty tags
 
-3. Following the requirement the application just does `full value matching`, which means that when search a field value it will only include the result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
-    - `megacorp` will find `MegaCorp` and `MegaCörp`
-    - `a nuisance in cote divoire ivory coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)`
-    - `A Nuisance in Cote D'Ivoire Ivory Coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)`
+3. According to the requirement the application can only do `full value matching`, which means that when search a field value it will only include the result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
+    - `megacorp` will find `MegaCorp` and `MegaCörp` and vice versa
+    - `a nuisance in cote divoire ivory coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)` and vice versa
+    - `Don't Worry Be Happy!` will find `dont worry be happy` and vice versa
 
 4. For fields which are array, a value that matches any element in the array will find the entity. For example, search `tags=Oregon` will find the entity whose tag is `['Oregon', 'Arizona', 'Delaware']`.
 
@@ -62,18 +62,18 @@ The application made following assumptions:
 
 In this section I'll explain the main modules and discuss the tradeoffs.
 
-The application is splitted into two main modules: `EntityRepository` and `IndexRepository`, and other helper modules such as `FieldsEnricher`. We will explain the modules one by one.
+The application is splitted into two main modules: `EntityRepository` and `IndexRepository`, and there are other helper modules such as `FieldsEnricher`. We will explain the modules one by one.
 
 ### EntityRepository
 
-As the search result must include all attributes of the entities, we must store all the fields read from the json files somewhere, that's what `EntityRepository` does, which provides APIs to add entity and also fetch entity by its id.
+As the search result must include all fields of the entities, after we load the entities from json file we must store all the fields somewhere, that's what `EntityRepository` does, which provides APIs to add entity and also fetch entity by id.
 
 #### EntityType and Entity
 
-Initially I thought to create a class for each entity type `Organization`, `User` and `Ticket`, however these entities just stores the fields and don't have much business logic. The only difference is that each entity type will add different fields from related entities. So I decided that just to create a generic `EntityType` and `Entity` class. The `EntityType` defines the name of the entity type and its fields schema. And `Entity` is just an instance of a particular `EntityType`. The different fields of related entities will be managed by `FieldsEnricher` (discussed in its own section) .
+Initially I thought to create a distinct class for each entity type `Organization`, `User` and `Ticket`, however I found that these entities just stores the fields and don't have much business logic. So I decided to just create a generic `EntityType` and `Entity` class. The `EntityType` defines the name of the entity type and supported fields. And `Entity` is just an instance of a particular `EntityType`.
 
 #### EntityRepository
-The `EntityRespository` is just a repository which saves all entities. Each `EntityType` has its own entity store. And in the entity store the entities are stored as a hash which maps entity id to entity, so the time complexity is `O(1)` when find an entity by id.
+The `EntityRespository` is just a repository which saves all entities. Each `EntityType` has its own entity store. And in the entity store the entities are stored in a hash which maps entity id to entity, so the time complexity is `O(1)` when fetch an entity by id.
 
 ### IndexRepository
 
@@ -81,15 +81,15 @@ To improve the performance of the search we can't search each entity one by one,
 
 #### InvertedIndex
 
-The `InvertedIndex` is a data structure which stores mappings from content to entity id. For example, when we add an entity, the entity will not only be added into the `EntityRepository`, but also its all field values will be indexed into an `InvertedIndex`. The main structure in `InvertedIndex` is a hash which maps a value to a set of entity ids. For example, for the User's `role` field, if it maps the value `admin` to user ids `1` and `3`, then when the user searches `admin` against `role` field, the time complexity is `O(1)` to find the entity ids whose role is `admin`.
+The `InvertedIndex` is a data structure which stores mappings from content to entity id. For example, when we add an entity, the entity will not only be added into the `EntityRepository`, but also its all field values will be indexed into some `InvertedIndex`. The main structure in `InvertedIndex` is a hash which maps a value to a set of entity ids. For example, for the User's `role` field, if it maps the value `admin` to user ids `1` and `3`, then when the user searches `admin` against `role` field, the time complexity is `O(1)` to find the two entity ids whose role field is `admin`.
 
-In our application each instance of the class `InvertedIndex` will manage the inverted index for a particular field of an entity type. And `EntityIndex` manages the inverted index for all fields of an entity type.
+Each `InvertedIndex` object will manage the inverted index for a particular field of an entity type. And `EntityIndex` manages the inverted index for all fields of an entity type (discussed later).
 
 The `InvertedIndex` mainly has two instance methods,
 - index: which is to index the terms for an entity id
-- search: which is to search the entity ids who matches the search term
+- search: which is to search the entity ids based on the search term
 
-**Empty value:** Each `InvertedIndex` maintains a special mapping whose key is `_empty_`, this is to store the entity ids whose value is empty, as the coding challenge requires that it should be able to search empty values. When search a term, if the term is empty, then the entity ids whose value is empty will be returned.
+**Empty value:** Each `InvertedIndex` maintains a special mapping whose key is `_empty_`, this is to store the entity ids whose value is empty, as this coding challenge requires that it should be able to search empty values. When search a term, if the term is empty, then the entity ids whose value is empty will be returned.
 
 #### Normalizers
 
@@ -97,27 +97,29 @@ Before we index field value of an entity, the field value should be `normalized`
 
 The application provides a bunch of normalizers in the `lib/normalizers/` folder. Each normalizer must implement two methods,
 
-- normalize_field_value: This is called when index an entity, the field values will be normalized before indexed in `InvertedIndex`. The field value is not necessarily a string, it could be an integer or boolean value read from json files. If the value can't be normalized it could throw `NormalizingError` exception, this also helps us to validate that the entity we add conforms to the schema.
+- normalize_field_value: This is called when index an entity, the field values will be normalized before indexed in `InvertedIndex`. The field value is not necessarily a string, it could be an integer or boolean value that is read from json files. If the value can't be normalized it could throw `NormalizingError` exception, this can help us to validate that the entity conforms to the schema when we add an entity.
 - normalize_search_term: When the user inputs a search term, the search term must also be normalized in the same way, otherwise there is no way we can find the result. The difference is that the user usually passes search term as a string, and we might need to normalize it into an integer or datetime before we search in `InvertedIndex`. If the search term can't be normalized we just return empty result as there is no way we can match any entity.
 
+For the above two methods, if the value to be normalized is empty then it should return `nil` so the inverted index will index them as empty values, and also search as empty values.
+
 The application provides the following normalizers:
-- NullNormalizer: This normalizer does not do any normalization. For example for the `_id` of Tickets which is UUID we should keep the original field value
+- NullNormalizer: This normalizer does not do any normalization. For example for the `_id` of Tickets which is UUID string we should keep the original field value
 - BooleanNormalizer: Normalize the value into a boolean, such as true or false
 - IntegerNormalizer: Normalize the value into an integer
-- DateTimeNormalizer: Normalize the value into an DateTime object
+- DateTimeNormalizer: Normalize the value into a DateTime object
 - TextNormalizer: Lowercase the text, remove punctuations and replace special Latin characters with corresponding ASCII characters
-- ArrayNormalizer: Normalize an array, can pass a Normalizer for the elements in the array.
+- ArrayNormalizer: Normalize an array, can pass a `element_normalizer` to normalize the elements in the array.
 
-**Tokenize**: Usually after normalizing and before add the value into the inverted index, there is another step called tokenizing, which is to split the normalized value into tokens. For example, `Francisca Rasmussen` can be tokenized into `francisca` and `rasmussen` so the user can get the result if he searches either `Francisca` or `Rasmussen`. This application doesn't do tokenizing currently since it only requires full value match. But in `EntityIndex#tokenize` method if provides an extension point which can add tokenizing later.
+**Tokenize**: Usually after normalizing and before add the normalized value into the inverted index, there is another step called tokenizing, which is to split the normalized value into tokens. For example, `Francisca Rasmussen` can be tokenized into `francisca` and `rasmussen` so the user can get the result if he searches either `Francisca` or `Rasmussen`. This application doesn't do tokenizing currently since it only requires full value match. But in `EntityIndex#tokenize` method if provides an extension point where we can add tokenizing later.
 
 #### EntityIndex
 
-The `EntityIndex` class is to manage all `InvertedIndex` for an entity type. So for each searchable field there will be an `InvertedIndex`. It provides the following instance methods mainly:
+The `EntityIndex` class is to manage all `InvertedIndex` for an entity type. So for each searchable field there will be an `InvertedIndex`. The `EntityIndex` maintains a hash which acts like a schema. The schema maps from the `field_name` to its corresponding normalizer. So when do indexing and search we know how to normalizing for each field in its own way.
+
+It provides the following instance methods mainly:
 
 - index: This is to index an entity. Each searchable field will be fetched from the entity and then indexed into that field's `InvertedIndex`.
 - search: To search the entity ids given a field name and a search term.
-
-The `EntityIndex` maintains a hash which maps from the `field_name` to its corresponding normalizer. So when do indexing and search we know how to normalizing for each field.
 
 #### IndexRepository
 
@@ -129,9 +131,9 @@ The `SearchManager` is like the facade of the application which manages one `Ent
 
 ### FieldsEnricher
 
-The application requires that when return the search results it should also include fields from the related entities. To implement this we use `FieldsEnricher`, there is a class for each entity type since the logic is specific to the entity type. The source code for `FieldsEnricher` is in `lib/fields_enrichers/` subfolder. It get the related entities by calling `SearchManager` since SearchManager has all the information. And also the performance should be fast enough since we fetch the the related entities by id or search against id whose time complexity are both `O(1)`.
+The application requires that when return the search results it should also include fields from the related entities. To implement this we use `FieldsEnricher`, there is a `FieldsEnricher` class for each entity type since each entity type needs to be enriched differently. The source code for `FieldsEnricher` is in `lib/fields_enrichers/` subfolder. It get the related entities by calling `SearchManager` since SearchManager has all the information. And also the performance should be fast enough since whether we fetch the the related entities by id or search against id the time complexity is always *roughly* `O(1)`.
 
-One problem for this solution is that we can't identify dirty data when add entities. For example if add a ticket whose submitter_id doesn't exist, we can't prevent the invalid data to be saved, we can only identify it when doing search and find the related_id doesn't exist.
+One problem for this solution is that we can't identify dirty data when add entities. For example if add a ticket whose submitter_id doesn't exist, we can't prevent the invalid data to be saved in repository, we can only identify it when doing search and find the related_id doesn't exist.
 
 ### Runner and Command
 
