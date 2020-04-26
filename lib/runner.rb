@@ -19,6 +19,7 @@ class Runner
     while (line = $stdin.readline.chomp) && !quit_command?(line)
       begin
         run_command(line)
+        print_usage
       rescue StandardError => exception
         puts "Something is wrong: #{exception.message}"
         puts exception.backtrace
@@ -46,7 +47,6 @@ class Runner
       ListSearchableFieldsCommand.new(search_manager).run
     else
       puts 'Unknown command'
-      print_usage
     end
   end
 
