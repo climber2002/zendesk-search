@@ -49,7 +49,7 @@ The application made following assumptions:
     - If the field type is string and the field value is empty string
     - If the field type is an array and the field value is empty array, e.g. empty tags
 
-3. According to the requirement the application can only do `full value matching`, which means that when search a field value it will only include the result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
+3. According to the requirement the application only needs to do `full value matching`, which means that when search a field value it will only include the result if the value is fully matched. However for text fields such as `name`, `description` and `tags` the application will ignore cases and punctuations, and also the  special Latin characters such as áèîõü will be converted to corresponding ASCII characters, which means,
     - `megacorp` will find `MegaCorp` and `MegaCörp` and vice versa
     - `a nuisance in cote divoire ivory coast` will find `A Nuisance in Cote D'Ivoire (Ivory Coast)` and vice versa
     - `Don't Worry Be Happy!` will find `dont worry be happy` and vice versa
@@ -70,10 +70,10 @@ As the search result must include all fields of the entities, after we load the 
 
 #### EntityType and Entity
 
-Initially I thought to create a distinct class for each entity type `Organization`, `User` and `Ticket`, however I found that these entities just stores the fields and don't have much business logic. So I decided to just create a generic `EntityType` and `Entity` class. The `EntityType` defines the name of the entity type and supported fields. And `Entity` is just an instance of a particular `EntityType`.
+Initially I thought to create a distinct class for each entity type `Organization`, `User` and `Ticket`, however I found that these entities just stores the fields and don't have much business logic. So I decided to just create a generic `EntityType` and `Entity` class. The `EntityType` defines the name of the entity type and supported fields. And `Entity` objects represent instances of a particular `EntityType`.
 
 #### EntityRepository
-The `EntityRespository` is just a repository which saves all entities. Each `EntityType` has its own entity store. And in the entity store the entities are stored in a hash which maps entity id to entity, so the time complexity is `O(1)` when fetch an entity by id.
+The `EntityRespository` is just a repository which stores all entities. Each `EntityType` has its own entity store. And in the entity store the entities are saved in a hash which maps entity id to entity, so the time complexity is `O(1)` when fetch an entity by id.
 
 ### IndexRepository
 
@@ -81,7 +81,7 @@ To improve the performance of the search we can't search each entity one by one,
 
 #### InvertedIndex
 
-The `InvertedIndex` is a data structure which stores mappings from content to entity id. For example, when we add an entity, the entity will not only be added into the `EntityRepository`, but also its all field values will be indexed into some `InvertedIndex`. The main structure in `InvertedIndex` is a hash which maps a value to a set of entity ids. For example, for the User's `role` field, if it maps the value `admin` to user ids `1` and `3`, then when the user searches `admin` against `role` field, the time complexity is `O(1)` to find the two entity ids whose role field is `admin`.
+The `InvertedIndex` is a data structure which stores mappings from content to entity id. For example, when we add an entity, the entity will not only be added into the `EntityRepository`, but also its all field values will be indexed into some `InvertedIndex`. The main structure in `InvertedIndex` is a hash which maps a value to a set of entity ids. For example, for the User's `role` field, if it maps the value `admin` to user ids `1` and `3`, then when the user searches `admin` against `role` field, it takes time complexity `O(1)` to find the two entity ids whose role field is `admin`.
 
 Each `InvertedIndex` object will manage the inverted index for a particular field of an entity type. And `EntityIndex` manages the inverted index for all fields of an entity type (discussed later).
 
@@ -114,7 +114,7 @@ The application provides the following normalizers:
 
 #### EntityIndex
 
-The `EntityIndex` class is to manage all `InvertedIndex` for an entity type. So for each searchable field there will be an `InvertedIndex`. The `EntityIndex` maintains a hash which acts like a schema. The schema maps from the `field_name` to its corresponding normalizer. So when do indexing and search we know how to normalizing for each field in its own way.
+The `EntityIndex` class is to manage all `InvertedIndex` for an entity type. So for each searchable field there will be an `InvertedIndex` instance. The `EntityIndex` maintains a hash instance variable `@field_normalizers` which acts like a schema for indexing. The schema maps from the `field_name` to its corresponding normalizer. So when do indexing and search we know how to normalizing for each field in its own way.
 
 It provides the following instance methods mainly:
 
