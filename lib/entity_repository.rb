@@ -1,3 +1,5 @@
+require_relative './search_error'
+
 ##
 # EntityRepository is a repository that stores all entities. It maintains a EntityStore
 # for each type of entity. Each entity is stored in its own entity_store
@@ -15,7 +17,7 @@ class EntityRepository
 
   def fetch_entity(entity_type_name, id)
     entity_store = entity_store_for(entity_type_name) 
-    raise ArgumentError, "Entity store for #{entity_type_name} not exist" if entity_store.nil?
+    raise SearchError, "Entity store for #{entity_type_name} not exist" if entity_store.nil?
 
     entity_store.fetch_entity_by(id)
   end
@@ -42,12 +44,12 @@ class EntityRepository
     end
 
     def add_entity(entity)
-      raise ArgumentError, "Id #{entity.id} already exists for #{entity.entity_type_name}" if contains?(entity)
+      raise SearchError, "Id #{entity.id} already exists for #{entity.entity_type_name}" if contains?(entity)
       entities[entity.id] = entity
     end
 
     def fetch_entity_by(id)
-      entities.fetch(id) { |_| raise ArgumentError, "Id #{id} doesn't exist" }
+      entities.fetch(id) { |_| raise SearchError, "Id #{id} doesn't exist" }
     end
 
     private

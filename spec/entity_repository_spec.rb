@@ -32,18 +32,18 @@ describe EntityRepository do
       subject.add_entity(build_organization)
     end
 
-    it 'raises ArgumentError if the entity type or entity id does NOT exist' do
+    it 'raises SearchError if the entity type or entity id does NOT exist' do
       expected_exception_msg = "Id 125 doesn't exist"
-      expect { subject.fetch_entity('Organization', 125) }.to raise_error(ArgumentError, expected_exception_msg)
+      expect { subject.fetch_entity('Organization', 125) }.to raise_error(SearchError, expected_exception_msg)
     end
 
     it 'fetches the entity if the id exists' do
       expect(subject.fetch_entity('Organization', 101).fields).to eq organization_fields
     end
 
-    it 'raises ArgumentError if the id already exists when add entity' do
+    it 'raises SearchError if the id already exists when add entity' do
       expected_exception_msg = 'Id 101 already exists for Organization'
-      expect { subject.add_entity(build_organization) }.to raise_error(ArgumentError, expected_exception_msg)
+      expect { subject.add_entity(build_organization) }.to raise_error(SearchError, expected_exception_msg)
     end
   end
   

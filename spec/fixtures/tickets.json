@@ -11,7 +11,7 @@
     "status": "pending",
     "submitter_id": 38,
     "assignee_id": 24,
-    "organization_id": 116,
+    "organization_id": 101,
     "tags": [
       "Ohio",
       "Pennsylvania",
@@ -34,7 +34,7 @@
     "status": "hold",
     "submitter_id": 71,
     "assignee_id": 38,
-    "organization_id": 112,
+    "organization_id": 104,
     "tags": [
       "Puerto Rico",
       "Idaho",
@@ -44,5 +44,50 @@
     "has_incidents": false,
     "due_at": "2016-08-15T05:37:32 -10:00",
     "via": "chat"
+  },
+  {
+    "_id": "81bdd837-e955-4aa4-a971-ef1e3b373c6d",
+    "url": "http://initech.zendesk.com/api/v2/tickets/81bdd837-e955-4aa4-a971-ef1e3b373c6d.json",
+    "external_id": "dbf801cc-2d9e-403e-9210-4c870240d270",
+    "created_at": "2016-01-13T05:42:04 -11:00",
+    "type": "problem",
+    "subject": "A Catastrophe in Pakistan",
+    "description": "Velit Lorem laboris qui enim occaecat veniam. Qui quis voluptate qui incididunt commodo laborum dolor non anim consectetur incididunt id.",
+    "priority": "normal",
+    "status": "pending",
+    "submitter_id": 1,
+    "assignee_id": 2,
+    "organization_id": 101,
+    "tags": [
+      "California",
+      "Palau",
+      "Kentucky",
+      "North Carolina"
+    ],
+    "has_incidents": true,
+    "via": "voice"
+  },
+  {
+    "_id": "35072cd7-e343-4d8e-a967-bbe32eb019cb",
+    "url": "http://initech.zendesk.com/api/v2/tickets/35072cd7-e343-4d8e-a967-bbe32eb019cb.json",
+    "external_id": "61749684-ca19-4589-8872-28b08317e395",
+    "created_at": "2016-04-07T05:09:10 -10:00",
+    "type": "task",
+    "subject": "A Catastrophe in Macau",
+    "description": "Eu adipisicing cillum et laborum exercitation fugiat mollit sunt eu non nulla tempor. Eu amet occaecat tempor incididunt adipisicing quis magna occaecat ut.",
+    "priority": "low",
+    "status": "pending",
+    "submitter_id": 2,
+    "assignee_id": 1,
+    "organization_id": 116,
+    "tags": [
+      "California",
+      "Palau",
+      "Kentucky",
+      "North Carolina"
+    ],
+    "has_incidents": true,
+    "due_at": "2016-08-07T04:44:19 -10:00",
+    "via": "web"
   }
 ]

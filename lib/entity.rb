@@ -17,6 +17,10 @@ class Entity
     entity_type.name
   end
 
+  def field_value_for(field_name)
+    fields[field_name]
+  end
+
   private
 
   def check_fields(fields)

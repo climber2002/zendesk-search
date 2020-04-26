@@ -71,7 +71,7 @@ describe EntityIndex do
     let(:normalizers) { Normalizer::USER_NORMALIZERS }
 
     it 'can search organization_id' do
-      expect(subject.search('organization_id', '119')).to eq [1]
+      expect(subject.search('organization_id', '101')).to eq [1]
     end
 
     it 'can search locale' do
