@@ -14,9 +14,7 @@ describe EntityIndex do
   subject { described_class.new(normalizers) }
   
   before do
-    entities.each do |entity|
-      subject.index(entity)
-    end
+    entities.each { |entity| subject.index(entity) }
   end
 
   describe 'search organizations' do
