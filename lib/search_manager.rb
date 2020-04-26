@@ -5,7 +5,8 @@ require_relative './fields_enrichers/ticket_enricher'
 require_relative './fields_enrichers/user_enricher'
 
 ##
-# SearchManager is responsible of indexing and search entites
+# SearchManager is a facade which wraps an EntityRepository and an IndexRepositoty. 
+# It's responsible of indexing and search entites
 class SearchManager
 
   def initialize

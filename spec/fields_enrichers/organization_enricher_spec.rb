@@ -1,22 +1,12 @@
 require 'entity_repository'
 require 'search_manager'
 require 'fields_enrichers/organization_enricher'
+require_relative './shared_fields_enricher_example'
 
 describe OrganizationEnricher do
-  let(:organizations) { load_entities_from_fixture(EntityType::ORGANIZATION_TYPE, 'organizations.json') }
-  let(:users)         { load_entities_from_fixture(EntityType::USER_TYPE, 'users.json') }
-  let(:tickets)       { load_entities_from_fixture(EntityType::TICKET_TYPE, 'tickets.json') }
 
-  let(:search_manager) { SearchManager.new }
-
-  before do
-    [organizations, users, tickets].each do |entities|
-      entities.each { |entity| search_manager.add_entity(entity) }
-    end
-  end
-
-  subject { described_class.new(search_manager) }
-
+  include_examples 'fields_enricher'
+  
   describe '#additional_fields_for' do
     it 'returns corresponding additional fields' do
       additional_fields = { 

@@ -13,7 +13,7 @@ describe EntityIndex do
   describe '#searchable_fields' do
     let(:normalizers) { Normalizer::ORGANIZATION_NORMALIZERS }
 
-    it 'get searchable_fields of organization' do
+    it 'get searchable_fields of Organization' do
       expected_field_names = ["_id", "url", "external_id", "name", "domain_names", "created_at",
                               "details", "shared_tickets", "tags"]
       expect(subject.searchable_fields).to eq expected_field_names

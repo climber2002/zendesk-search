@@ -15,7 +15,7 @@ class InvertedIndex
   end
 
   # Index an array of terms for the entity_id, here it ASSUMES that the
-  # terms are already normalized already
+  # terms are already normalized already, the terms should be an array
   def index(terms, entity_id)
     if terms.empty?
       index_empty_term(entity_id)
