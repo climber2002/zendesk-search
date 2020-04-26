@@ -39,6 +39,10 @@ class SearchManager
     entity_repository.fetch_entity(entity_type_name, entity_id)
   end
 
+  def searchable_fields
+    index_repository.searchable_fields
+  end
+
   private
 
   attr_reader :entity_repository, :index_repository, :fields_enrichers

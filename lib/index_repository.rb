@@ -22,6 +22,13 @@ class IndexRepository
     entity_index.search(field_name, search_term)
   end
 
+  def searchable_fields
+    entity_indices.reduce({}) do |result, (entity_type_name, entity_index)|
+      result["#{entity_type_name}"] = entity_index.searchable_fields
+      result
+    end
+  end
+
   private
 
   attr_reader :entity_indices

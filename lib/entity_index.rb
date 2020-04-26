@@ -1,5 +1,6 @@
 require_relative './normalizer'
 require_relative './search_error'
+require_relative './inverted_index'
 
 ##
 # The EntityIndex maintains the inverted indices for a particular EntityType. Each
@@ -34,6 +35,10 @@ class EntityIndex
   rescue NormalizingError
     # if any error normalizing, for example search 'abcd' against an interger field, just return empty result
     []
+  end
+
+  def searchable_fields
+    @searchable_fields ||= field_normalizers.keys
   end
 
   private
