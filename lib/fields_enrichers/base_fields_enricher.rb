@@ -27,5 +27,7 @@ class BaseFieldsEnricher
 
     related_entity = search_manager.fetch_entity(related_entity_type, related_entity_id)
     related_entity.nil? ? {} : { "#{related_field_name}_name" => related_entity.field_value_for('name') }
+  rescue SearchError
+    { "#{related_field_name}_name" => "Can't find #{related_entity_type} with id #{related_entity_id}" }
   end
 end

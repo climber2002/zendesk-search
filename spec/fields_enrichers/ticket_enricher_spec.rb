@@ -18,10 +18,15 @@ describe TicketEnricher do
       expect(subject.enriched_fields(ticket)).to eq(ticket.fields.merge(additional_fields))
     end
 
-    it 'raises SearchError if the related entity id does NOT exist' do
+    it 'returns corresponding additional fields with error message' do
       # submitter_id and assignee_id can't be found in users
+      additional_fields = {
+        'submitter_name'      => "Can't find User with id 69",
+        'assignee_name'       => "Can't find User with id 27",
+        'organization_name'   => "Can't find Organization with id 115"
+      }
       ticket = search_manager.fetch_entity('Ticket', 'a25f90f3-2157-4585-bbee-360367a2c1e8')
-      expect { subject.enriched_fields(ticket) }.to raise_error(SearchError)
+      expect(subject.enriched_fields(ticket)).to eq(ticket.fields.merge(additional_fields))
     end
   end
 end
