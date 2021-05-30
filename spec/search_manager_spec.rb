@@ -41,5 +41,33 @@ describe SearchManager do
       ]
       expect(subject.search_entities('User', '_id', '1')).to eq expected
     end
+
+    it 'can search tickets with some dirty data in tickets data' do
+      expected = [
+        {
+          '_id'                 => '436bf9b0-1147-4c0a-8439-6f79833bff5b',
+          'url'                 => 'http://initech.zendesk.com/api/v2/tickets/436bf9b0-1147-4c0a-8439-6f79833bff5b.json',
+          'external_id'         => '9210cdc9-4bee-485f-a078-35396cd74063',
+          'type'                => 'incident',
+          'created_at'          => '2016-04-28T11:19:34 -10:00',
+          'subject'             => 'A Catastrophe in Korea (North)',
+          'description'         => 'Nostrud ad sit velit cupidatat laboris ipsum nisi amet laboris ex exercitation amet et proident. Ipsum fugiat aute dolore tempor nostrud velit ipsum.',
+          'priority'            => 'high',
+          'status'              => 'pending',
+          'submitter_id'        => 38,
+          'assignee_id'         => 24,
+          'organization_id'     => 101,
+          'tags'                => ['Ohio', 'Pennsylvania', 'American Samoa', 'Northern Mariana Islands'],
+          'has_incidents'       => false,
+          'due_at'              => '2016-07-31T02:37:50 -10:00',
+          'via'                 => 'web',
+          'assignee_name'       => "Can't find User with id 24",
+          'organization_name'   => 'Enthaze',
+          'submitter_name'      => "Can't find User with id 38"
+        }
+      ]
+
+      expect(subject.search_entities('Ticket', '_id', '436bf9b0-1147-4c0a-8439-6f79833bff5b')).to eq expected
+    end
   end
 end

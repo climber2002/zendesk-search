@@ -14,7 +14,7 @@ The project has following sub-folders:
 
 ### Setup
 
-I use Ruby `2.6.3` to create this app but it should work with any version higher than `2.5.0`. After installing Ruby the only dependency for this app is the `rspec` gem. If you already have `rspec` installed then all is setup. Otherwise `cd` into project directory and run following command to install `rspec` (All following commands assume the current directory is the project directory),
+I use Ruby `2.5.3` to create this app but it should work with any version higher than `2.5.0`. After installing Ruby and `bundler` gem the only dependency for this app is the `rspec` gem. If you already have `rspec` installed then all is setup. Otherwise `cd` into project directory and run following command to install `rspec` (All following commands assume the current directory is the project directory),
 
 ```bash
 bundle install
@@ -77,11 +77,11 @@ The `EntityRepository` is just a repository which stores all entities. Each `Ent
 
 ### IndexRepository
 
-To improve the performance of the search we can't search each entity one by one, otherwise the search response will increase linearly as entities grows. So we use a data structure called `Inverted Index` to improve response time. The `IndexRepository` is a repository which stores a bunch of inverted index.
+To improve the performance of the search we can't search each entity one by one, otherwise the search response will increase linearly as entities grows. So we use a data structure called `Inverted Index` to improve response time. The `IndexRepository` is a repository which stores a bunch of inverted indexes.
 
 #### InvertedIndex
 
-The `InvertedIndex` is a data structure which stores mappings from content to entity id. For example, when we add an entity, the entity will not only be added into the `EntityRepository`, but also its all field values will be indexed into some `InvertedIndex`. The main structure in `InvertedIndex` is a hash which maps a value to a set of entity ids. For example, for the User's `role` field, if it maps the value `admin` to user ids `1` and `3`, then when the user searches `admin` against `role` field, it takes time complexity `O(1)` to find the two entity ids whose role field is `admin`.
+The `InvertedIndex` is a data structure which stores mappings from content to entity id. For example, when we add an entity, the entity will not only be added into the `EntityRepository`, but also its all field values will be indexed into some `InvertedIndex`. The main structure in `InvertedIndex` is a hash which maps a term to a set of entity ids. For example, for the User's `role` field, if it maps the value `admin` to user ids `1` and `3`, then when the user searches `admin` against `role` field, it takes time complexity `O(1)` to find the two entity ids whose role field is `admin`.
 
 Each `InvertedIndex` object will manage the inverted index for a particular field of an entity type. And `EntityIndex` manages the inverted index for all fields of an entity type (discussed later).
 
@@ -89,7 +89,7 @@ The `InvertedIndex` mainly has two instance methods,
 - index: which is to index the terms for an entity id
 - search: which is to search the entity ids based on the search term
 
-**Empty value:** Each `InvertedIndex` maintains a special mapping whose key is `_empty_`, this is to store the entity ids whose value is empty, as this coding challenge requires that it should be able to search empty values. When search a term, if the term is empty, then the entity ids whose value is empty will be returned.
+**Empty value:** Each `InvertedIndex` maintains a special mapping whose key is `__empty__`, this is to store the entity ids whose value is empty, as this coding challenge requires that it should be able to search empty values. When search a term, if the term is empty, then the entity ids whose value is empty will be returned.
 
 #### Normalizers
 
@@ -109,8 +109,6 @@ The application provides the following normalizers:
 - DateTimeNormalizer: Normalize the value into a DateTime object
 - TextNormalizer: Lowercase the text, remove punctuations and replace special Latin characters with corresponding ASCII characters
 - ArrayNormalizer: Normalize an array, can pass a `element_normalizer` to normalize the elements in the array.
-
-**Tokenize**: Usually after normalizing and before add the normalized value into the inverted index, there is another step called tokenizing, which is to split the normalized value into tokens. For example, `Francisca Rasmussen` can be tokenized into `francisca` and `rasmussen` so the user can get the result if he searches either `Francisca` or `Rasmussen`. This application doesn't do tokenizing currently since it only requires full value match. But in `EntityIndex#tokenize` method if provides an extension point where we can add tokenizing later.
 
 #### EntityIndex
 

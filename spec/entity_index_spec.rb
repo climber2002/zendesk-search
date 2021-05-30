@@ -20,7 +20,7 @@ describe EntityIndex do
     end
   end
 
-  describe '#search' do
+  describe 'index and search' do
     before do
       entities.each { |entity| subject.index(entity) }
     end

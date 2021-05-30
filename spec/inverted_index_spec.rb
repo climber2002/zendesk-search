@@ -33,9 +33,9 @@ describe InvertedIndex do
     end
 
     context 'when the terms are booleans and entity ids are string' do
-      let(:empty_boolean) { [] }
-      let(:true_boolean) { [true] }
-      let(:false_boolean) { [false] }
+      let(:empty_boolean) { nil }
+      let(:true_boolean) { true }
+      let(:false_boolean) { false }
 
       before do
         subject.index(empty_boolean, '200')
@@ -50,6 +50,28 @@ describe InvertedIndex do
       
       it 'can search against false' do
         expect(subject.search(false)).to eq ['202']
+      end
+
+      it 'can search against empty' do
+        expect(subject.search(nil)).to eq ['200']
+      end
+    end
+
+    context 'when the terms are string and entity ids are string' do
+      let(:empty) { nil }
+      let(:string1) { 'string1' }
+      let(:string2) { 'string2' }
+
+      before do
+        subject.index(empty, '200')
+        subject.index(string2, '201')
+        subject.index(string1, '202')
+        subject.index(string2, '203')
+      end
+
+      it 'can search against string terms' do
+        expect(subject.search(string2)).to eq ['201', '203']
+        expect(subject.search(string1)).to eq ['202']
       end
 
       it 'can search against empty' do

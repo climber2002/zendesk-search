@@ -5,7 +5,7 @@ require 'set'
 # a hash `inverted_index`, for which the key is the term, and value is the
 # set of entity ids whose corresponding field matches the term.
 class InvertedIndex
-  KEY_FOR_EMPTY = '_empty_'
+  KEY_FOR_EMPTY = '__empty__'
 
   def initialize
     @inverted_index = Hash.new
@@ -14,9 +14,11 @@ class InvertedIndex
     create_id_set_for_term(KEY_FOR_EMPTY)
   end
 
-  # Index an array of terms for the entity_id, here it ASSUMES that the
-  # terms are already normalized already, the terms should be an array
-  def index(terms, entity_id)
+  # Index the normalized_value, the normalized_value could be an array if the value is
+  # normalized from an ArrayNormalizer. And we convert the normalized_value into an array
+  # of terms
+  def index(normailized_value, entity_id)
+    terms = Array(normailized_value)
     if terms.empty?
       index_empty_term(entity_id)
     else

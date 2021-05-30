@@ -31,7 +31,7 @@ class EntityIndex
   def search(field_name, search_term)
     normalizer = normalizer_for(field_name)
     normalized_term = normalizer.normalize_search_term(search_term)
-    index_for(field_name).search(normalized_term)
+    find_index_for(field_name).search(normalized_term)
   rescue NormalizingError
     # if any error normalizing, for example search 'abcd' against an interger field, just return empty result
     []
@@ -47,19 +47,12 @@ class EntityIndex
 
   def index_field(field_name, field_value, normalizer, entity_id)
     normalized_value = normalizer.normalize_field_value(field_value)
-    tokenized_terms = tokenize(normalized_value)
-    field_index = index_for(field_name)
-    field_index.index(tokenized_terms, entity_id)
+    field_index = find_index_for(field_name)
+    field_index.index(normalized_value, entity_id)
   end
 
-  def index_for(field_name)
+  def find_index_for(field_name)
     field_indices[field_name]
-  end
-
-  # For the requirements we don't need tokenize as it only requires full value match, but if
-  # can search substrings we need to create tokenizer, for example split into words separated by space
-  def tokenize(normalized_value)
-    Array(normalized_value)
   end
 
   def normalizer_for(field_name)

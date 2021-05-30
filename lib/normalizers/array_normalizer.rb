@@ -1,5 +1,8 @@
 require_relative './base_normalizer'
 
+##
+# ArrayNormalizer is to normailize an array of elements, it has an attribute element_normalizer
+# which indicates the normalizer for its elements
 class ArrayNormalizer
   include BaseNormalizer
 

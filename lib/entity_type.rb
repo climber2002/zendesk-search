@@ -1,18 +1,14 @@
+require_relative './normalizer'
+
 ##
 # This class defines an entity type, for example Organization or User, and also
 # it defines the fields that the entity supported
 class EntityType
-  ORGANIZATION_FIELDS = ['_id', 'url', 'external_id', 'name', 'domain_names',
-                         'created_at', 'details', 'shared_tickets', 'tags']
+  ORGANIZATION_FIELDS = Normalizer::ORGANIZATION_NORMALIZERS.keys
 
-  USER_FIELDS         = ['_id', 'url', 'external_id', 'name', 'alias', 'created_at',
-                         'active', 'verified', 'shared', 'locale', 'timezone',
-                         'last_login_at', 'email', 'phone', 'signature', 'organization_id',
-                         'tags', 'suspended', 'role']
+  USER_FIELDS         = Normalizer::USER_NORMALIZERS.keys
 
-  TICKET_FIELDS       = ['_id', 'url', 'external_id', 'created_at', 'type', 'subject',
-                         'description', 'priority', 'status', 'submitter_id', 'assignee_id',
-                         'organization_id', 'tags', 'has_incidents', 'due_at', 'via']
+  TICKET_FIELDS       = Normalizer::TICKET_NORMALIZERS.keys
 
   attr_reader :name, :field_names
 
