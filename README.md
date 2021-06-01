@@ -38,6 +38,12 @@ To run the application run following command and then follow the instructions,
 ./bin/zendesk-search
 ```
 
+If you are running on Windows which complains `zendesk-search` is not an executable file, you can run following command,
+
+```
+ruby ./bin/zendesk-search
+```
+
 ### Assumptions
 
 The application made following assumptions:
