@@ -17,11 +17,11 @@ class TextNormalizer
   EQUIVALENT_ASCII_CHARS = 'AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkk' \
                            'LlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz'
 
+  private
+
   def normalize_field_value_impl(value)
     replace_non_characters(value).gsub(/[[:punct:]]/, '').downcase
   end
-
-  private
 
   def replace_non_characters(value)
     value.tr(NON_ASCII_CHARS, EQUIVALENT_ASCII_CHARS)

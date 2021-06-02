@@ -10,12 +10,6 @@ class ArrayNormalizer
     @element_normalizer = element_normalizer
   end
 
-  def normalize_field_value_impl(value)
-    Array(value).map do |element|
-      element_normalizer.normalize_field_value(element)
-    end
-  end
-
   def normalize_search_term(search_term)
     element_normalizer.normalize_search_term(search_term)
   end
@@ -23,4 +17,10 @@ class ArrayNormalizer
   private
 
   attr_reader :element_normalizer
+
+  def normalize_field_value_impl(value)
+    Array(value).map do |element|
+      element_normalizer.normalize_field_value(element)
+    end
+  end
 end
